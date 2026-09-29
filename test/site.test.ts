@@ -61,10 +61,22 @@ Deno.test("loads Umami first-party and the CSP allows it", async () => {
   const nginx = await Deno.readTextFile(new URL("../nginx.conf", import.meta.url))
   const csp = nginx.match(/set \$csp "([^"]+)"/)?.[1]
   assert(csp, "nginx.conf sets no CSP")
-  assertMatch(csp, /script-src 'self'/)
-  assertMatch(csp, /connect-src 'self'/)
+  // Exactly 'self': anything wider would let a third-party script or beacon in.
+  assertMatch(csp, /script-src 'self';/)
+  assertMatch(csp, /connect-src 'self';/)
+  assertMatch(html, /data-umami-event="book-call"/)
+  assertMatch(html, /data-umami-event="email"/)
+
+  // Any of these missing and /umami/script.js answers 404 while the page looks fine.
   const compose = await Deno.readTextFile(new URL("../compose.yml", import.meta.url))
-  assertMatch(compose, /PathPrefix\(`\/umami\/`\)/)
+  const label = (key: string) => compose.match(new RegExp(`${key}=(.+?)"`))?.[1]
+  assertMatch(label("routers\\.neatsoft-umami\\.rule") ?? "", /PathPrefix\(`\/umami\/`\)/)
+  assertEquals(label("routers\\.neatsoft-umami\\.service"), "hl-umami@docker")
+  assertMatch(label("routers\\.neatsoft-umami\\.middlewares") ?? "", /neatsoft-umami-strip/)
+  assertEquals(label("middlewares\\.neatsoft-umami-strip\\.stripprefix\\.prefixes"), "/umami")
+  // Traefik's default priority is the rule's length; the site router's must lose.
+  const siteRule = label("routers\\.neatsoft\\.rule") ?? ""
+  assert(Number(label("routers\\.neatsoft-umami\\.priority")) > siteRule.length)
 })
 
 Deno.test("Organization JSON-LD matches the id and UEN antonshubin.com points at", () => {

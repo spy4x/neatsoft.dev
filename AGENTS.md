@@ -22,8 +22,10 @@ Rules that follow from that:
 
 ## Code
 
-Plain HTML and inline CSS in `site/index.html`, no build step and no JavaScript. The CSP in
-`nginx.conf` allows no scripts; adding one means changing the policy on purpose. `deno fmt`
+Plain HTML and inline CSS in `site/index.html`, no build step and no JavaScript of our own. The
+only script is Umami analytics (website `neatsoft.dev` on the shared Umami, `stats.<domain>`),
+loaded first-party from `/umami/`: `compose.yml` routes that path to the Umami container, and the
+CSP in `nginx.conf` allows scripts and requests from `'self'` only. `deno fmt`
 skips `site/` so the HTML keeps its hand formatting.
 
 ## Check and deploy

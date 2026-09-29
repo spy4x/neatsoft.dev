@@ -47,8 +47,24 @@ Deno.test("shows Anton's photo with alt text and a fixed size", async () => {
 
 Deno.test("every local file the page loads exists", async () => {
   for (const [, path] of html.matchAll(/(?:href=|src=|url\()["']?\/([\w./-]+\.\w+)/g)) {
+    // /umami/ is served by the Umami container through Traefik, not from site/.
+    if (path.startsWith("umami/")) continue
     await Deno.stat(new URL(path, root))
   }
+})
+
+Deno.test("loads Umami first-party and the CSP allows it", async () => {
+  const script = html.match(/<script\s[^>]*src="\/umami\/script\.js"[^>]*>/s)?.[0]
+  assert(script, "Umami script is missing or not first-party")
+  assertMatch(script, /data-website-id="[0-9a-f-]{36}"/)
+  assertMatch(script, /data-domains="neatsoft\.dev"/)
+  const nginx = await Deno.readTextFile(new URL("../nginx.conf", import.meta.url))
+  const csp = nginx.match(/set \$csp "([^"]+)"/)?.[1]
+  assert(csp, "nginx.conf sets no CSP")
+  assertMatch(csp, /script-src 'self'/)
+  assertMatch(csp, /connect-src 'self'/)
+  const compose = await Deno.readTextFile(new URL("../compose.yml", import.meta.url))
+  assertMatch(compose, /PathPrefix\(`\/umami\/`\)/)
 })
 
 Deno.test("Organization JSON-LD matches the id and UEN antonshubin.com points at", () => {

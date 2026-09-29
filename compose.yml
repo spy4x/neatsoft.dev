@@ -29,6 +29,17 @@ services:
       # Public page that should be indexed: `allow-index` overrides the default
       # X-Robots-Tag deny (rostok stacks/traefik/dynamic/00-base.yml).
       - "traefik.http.routers.neatsoft.middlewares=neatsoft-redirect,allow-index@file"
+      # Umami analytics, first-party: /umami/* goes to the shared Umami container (rostok
+      # stacks/umami, service hl-umami), so ad blockers and Safari do not drop it.
+      - "traefik.http.middlewares.neatsoft-umami-strip.stripprefix.prefixes=/umami"
+      - "traefik.http.routers.neatsoft-umami.rule=Host(`neatsoft.dev`) && PathPrefix(`/umami/`)"
+      - "traefik.http.routers.neatsoft-umami.middlewares=neatsoft-umami-strip,robots-deny@file"
+      - "traefik.http.routers.neatsoft-umami.entrypoints=websecure"
+      - "traefik.http.routers.neatsoft-umami.tls=true"
+      - "traefik.http.routers.neatsoft-umami.tls.certresolver=myresolver"
+      - "traefik.http.routers.neatsoft-umami.service=hl-umami@docker"
+      # The site router's rule is longer, so without this Traefik would send /umami/ to nginx.
+      - "traefik.http.routers.neatsoft-umami.priority=100"
     deploy:
       resources:
         limits:

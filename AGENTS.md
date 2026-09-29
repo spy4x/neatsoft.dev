@@ -28,5 +28,7 @@ skips `site/` so the HTML keeps its hand formatting.
 
 ## Check and deploy
 
-`deno task check` before every commit. After merge, `deno task deploy` from a clean `main`,
+`deno task check` before every commit. After merge, `deno task deploy` from a clean `origin/main`,
 without asking (see README "Deploy").
+
+The first deploy replaces the old `neatsoft-landing` container: README "Moving off the old site".

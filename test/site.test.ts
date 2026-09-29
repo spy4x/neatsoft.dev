@@ -42,6 +42,8 @@ Deno.test("Organization JSON-LD matches the id and UEN antonshubin.com points at
   assertEquals(org["@id"], "https://neatsoft.dev/#org")
   assertEquals(org.legalName, "NeatSoft PTE LTD")
   assertEquals(org.identifier, { "@type": "PropertyValue", propertyID: "UEN", value: "202300222R" })
+  const person = jsonLd().find((node) => node["@type"] === "Person")
+  assertEquals(person?.["@id"], "https://antonshubin.com/#person")
 })
 
 Deno.test("sends offers, work and contact to antonshubin.com", () => {
@@ -51,10 +53,27 @@ Deno.test("sends offers, work and contact to antonshubin.com", () => {
 })
 
 Deno.test("makes no price, refund or team claim that could drift from antonshubin.com", () => {
-  const text = html.replace(/<[^>]+>/g, " ").toLowerCase()
-  for (
-    const phrase of ["$", "refund", "guarantee", "squad", "our team", "we ", "code monkey"]
-  ) {
+  // Meta tags count too: the old site's "14-day alignment guarantee" sat in its description.
+  const metaText = [...html.matchAll(/<meta\s[^>]*content="([^"]*)"/g)].map((m) => m[1])
+  const text = [html.replace(/<[^>]+>/g, " "), ...metaText].join(" ").toLowerCase()
+  const phrases = [
+    "$",
+    "usd",
+    "sgd",
+    "refund",
+    "guarantee",
+    "hourly",
+    "billing",
+    "scope",
+    "squad",
+    "team",
+    "we ",
+    "we're",
+    "we'll",
+    " our ",
+    "code monkey",
+  ]
+  for (const phrase of phrases) {
     assert(!text.includes(phrase), `page says "${phrase}"`)
   }
 })

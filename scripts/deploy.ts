@@ -4,8 +4,8 @@
  * content-only change is live as soon as rsync finishes; compose recreates the
  * container only when `compose.yml` changed.
  *
- * Refuses to run from a dirty tree or from any branch but `main`, so what is
- * live is always a reviewed, merged commit.
+ * Refuses to run unless the tree is clean and `HEAD` is exactly `origin/main`,
+ * so what goes live is a merged commit.
  */
 
 const SERVER = "cloudlab"
@@ -18,10 +18,12 @@ async function run(cmd: string, args: string[]): Promise<string> {
   return new TextDecoder().decode(out.stdout).trim()
 }
 
-const branch = await run("git", ["rev-parse", "--abbrev-ref", "HEAD"])
+await run("git", ["fetch", "--quiet", "origin", "main"])
+const head = await run("git", ["rev-parse", "HEAD"])
+const remote = await run("git", ["rev-parse", "origin/main"])
 const dirty = await run("git", ["status", "--porcelain"])
-if (branch !== "main" || dirty) {
-  console.error(`Deploy runs only from a clean main (branch: ${branch}, dirty: ${Boolean(dirty)})`)
+if (head !== remote || dirty) {
+  console.error("Deploy runs only from a clean checkout of origin/main")
   Deno.exit(1)
 }
 

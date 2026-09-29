@@ -8,7 +8,7 @@ what the company is, its registration details, and links to
 ## Layout
 
 ```
-site/          # the served files: index.html, og.png, favicon.svg, robots.txt, sitemap.xml
+site/          # the served files: index.html, anton.webp, og.png, fonts/, favicon, robots, sitemap
 test/          # checks on the page (SEO tags, JSON-LD, links, no drifting claims)
 scripts/       # deploy.ts
 compose.yml    # nginx behind the shared Traefik on the cloud server
@@ -52,8 +52,17 @@ by rostok from its generic `nginx` stack and an entry in the untracked
 4. `curl -sI https://www.neatsoft.dev/x` answers 301 to `https://neatsoft.dev/x`, and
    `curl -s https://neatsoft.dev | grep 202300222R` finds the UEN.
 
-To regenerate `site/og.png` after a wording change:
+`site/anton.webp` is a crop of antonshubin.com's `static/img/photo-big.webp`, and `site/og.png`
+(the link preview) is drawn from it with the fonts in `site/fonts/`. From the repository root, with
+antonshubin.com checked out next to it:
 
 ```bash
-magick -size 1200x630 xc:'#121214' -fill '#ececee' -font DejaVu-Sans-Bold -pointsize 88 -annotate +96+300 'NeatSoft PTE LTD' -fill '#a3a3ab' -font DejaVu-Sans -pointsize 40 -annotate +96+380 'Software engineering company, Singapore' -annotate +96+440 'UEN 202300222R' -strip site/og.png
+magick ../antonshubin.com/static/img/photo-big.webp -crop 900x900+146+300 +repage -resize 400x400 -quality 82 -strip site/anton.webp
+F=site/fonts
+magick -size 1200x630 xc:'#15120f' \( site/anton.webp -resize 380x380 \( -size 380x380 xc:none -fill white -draw "roundrectangle 0,0,379,379,40,40" \) -compose DstIn -composite \) -gravity NorthWest -geometry +96+125 -compose Over -composite \
+  -fill '#bcb7af' -font $F/ibm-plex-sans-latin-600-normal.woff2 -pointsize 30 -annotate +540+215 'NEATSOFT PTE LTD · SINGAPORE' \
+  -fill '#efebe2' -font $F/literata-latin-600-normal.woff2 -pointsize 64 -annotate +540+305 'Anton Shubin' \
+  -fill '#bcb7af' -font $F/ibm-plex-sans-latin-400-normal.woff2 -pointsize 34 -annotate +540+370 'Senior full-stack engineer' -annotate +540+418 'and tech lead' \
+  -fill '#f97316' -font $F/ibm-plex-sans-latin-600-normal.woff2 -pointsize 30 -annotate +540+490 'UEN 202300222R' -strip site/og.png
+magick site/og.png -depth 8 -define png:compression-level=9 PNG24:site/og.png
 ```

@@ -35,6 +35,22 @@ Deno.test("the Open Graph image exists and is 1200x630", async () => {
   assertEquals([view.getUint32(16), view.getUint32(20)], [1200, 630])
 })
 
+Deno.test("shows Anton's photo with alt text and a fixed size", async () => {
+  const img = html.match(/<img\s[^>]*src="\/anton\.webp"[^>]*>/s)?.[0]
+  assert(img, "photo is missing")
+  assertMatch(img, /alt="Anton Shubin[^"]*"/)
+  // Fixed dimensions keep the text from jumping while the photo loads.
+  assertMatch(img, /width="\d+"/)
+  assertMatch(img, /height="\d+"/)
+  assert((await Deno.stat(new URL("anton.webp", root))).size > 0)
+})
+
+Deno.test("every local file the page loads exists", async () => {
+  for (const [, path] of html.matchAll(/(?:href=|src=|url\()["']?\/([\w./-]+\.\w+)/g)) {
+    await Deno.stat(new URL(path, root))
+  }
+})
+
 Deno.test("Organization JSON-LD matches the id and UEN antonshubin.com points at", () => {
   const org = jsonLd().find((node) => node["@type"] === "Organization")
   assert(org, "Organization node is missing")

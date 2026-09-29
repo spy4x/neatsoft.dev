@@ -10,7 +10,8 @@
     >
     <link rel="canonical" href="https://neatsoft.dev/">
     <meta name="robots" content="index, follow">
-    <meta name="color-scheme" content="light dark">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#15120f">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
     <meta property="og:type" content="website">
@@ -24,7 +25,7 @@
     <meta property="og:image" content="https://neatsoft.dev/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="NeatSoft PTE LTD, Singapore, UEN 202300222R">
+    <meta property="og:image:alt" content="Anton Shubin, NeatSoft PTE LTD, Singapore, UEN 202300222R">
     <meta name="twitter:card" content="summary_large_image">
 
     <script type="application/ld+json">
@@ -63,6 +64,7 @@
             "@id": "https://antonshubin.com/#person",
             "name": "Anton Shubin",
             "url": "https://antonshubin.com/",
+            "image": "https://antonshubin.com/img/photo-big.webp",
             "sameAs": [
               "https://www.upwork.com/freelancers/ashubin",
               "https://github.com/spy4x",
@@ -74,145 +76,329 @@
     </script>
 
     <style>
-      :root {
-        --bg: #f7f7f5;
-        --card: #ffffff;
-        --text: #1c1c1e;
-        --muted: #5b5b61;
-        --line: #e4e4e0;
-        --link: #1d4ed8;
+      /* Fonts and colours follow antonshubin.com (assets/styles.css), so both sites read as one person. */
+      @font-face {
+        font-family: "Literata";
+        font-weight: 600;
+        font-display: swap;
+        src: url("/fonts/literata-latin-600-normal.woff2") format("woff2");
       }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #121214;
-          --card: #1b1b1f;
-          --text: #ececee;
-          --muted: #a3a3ab;
-          --line: #2c2c32;
-          --link: #8ab4ff;
-        }
+      @font-face {
+        font-family: "IBM Plex Sans";
+        font-weight: 400;
+        font-display: swap;
+        src: url("/fonts/ibm-plex-sans-latin-400-normal.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "IBM Plex Sans";
+        font-weight: 600;
+        font-display: swap;
+        src: url("/fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
+      }
+      /* Metric-matched fallbacks keep the text from jumping when the fonts arrive. */
+      @font-face {
+        font-family: "Literata Fallback";
+        src: local("Georgia"), local("Times New Roman"), local("DejaVu Serif"),
+          local("Liberation Serif"), local("Noto Serif");
+        size-adjust: 112.16%;
+        ascent-override: 104.94%;
+        descent-override: 27.46%;
+        line-gap-override: 0%;
+      }
+      @font-face {
+        font-family: "IBM Plex Sans Fallback";
+        src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("DejaVu Sans"),
+          local("Noto Sans");
+        size-adjust: 101.17%;
+        ascent-override: 101.32%;
+        descent-override: 27.18%;
+        line-gap-override: 0%;
+      }
+      :root {
+        --ink: #15120f;
+        --paper: #25211d;
+        --lamp: #2f2a26;
+        --rule: #413c38;
+        --rule-strong: #857f79;
+        --parchment: #efebe2;
+        --graphite: #bcb7af;
+        --accent: #f97316;
+        --accent-hover: #fb923c;
+        --heading: "Literata", "Literata Fallback", serif;
       }
       * {
         box-sizing: border-box;
       }
       body {
         margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px 16px;
-        background: var(--bg);
-        color: var(--text);
-        font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        background: var(--ink);
+        color: var(--parchment);
+        font: 17px/1.65 "IBM Plex Sans", "IBM Plex Sans Fallback", sans-serif;
+        -webkit-font-smoothing: antialiased;
       }
       main {
-        width: 100%;
-        max-width: 640px;
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 12px;
-        padding: 40px 32px;
-      }
-      h1 {
-        margin: 0;
-        font-size: 1.9rem;
-        line-height: 1.2;
-      }
-      .sub {
-        margin: 4px 0 28px;
-        color: var(--muted);
-      }
-      h2 {
-        margin: 32px 0 8px;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: var(--muted);
-      }
-      p {
-        margin: 0 0 16px;
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 64px 24px 48px;
       }
       a {
-        color: var(--link);
+        color: var(--parchment);
+        text-decoration-color: var(--rule-strong);
+        text-underline-offset: 3px;
       }
-      ul {
+      a:hover {
+        text-decoration-color: var(--accent);
+      }
+      a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+      }
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--graphite);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      h1,
+      h2 {
+        font-family: var(--heading);
+        font-weight: 600;
+        line-height: 1.2;
+      }
+      h1 {
+        margin: 0 0 16px;
+        font-size: clamp(2rem, 5vw, 2.75rem);
+      }
+      h2 {
+        margin: 0 0 16px;
+        font-size: 1.35rem;
+      }
+      p {
+        margin: 0 0 14px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .hero img {
+        width: 200px;
+        height: 200px;
+        border-radius: 24px;
+        object-fit: cover;
+        border: 1px solid var(--rule);
+      }
+      .lead {
+        color: var(--graphite);
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      .button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: 1px solid var(--rule-strong);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .button:hover {
+        background: var(--lamp);
+      }
+      .button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--ink);
+      }
+      .button.primary:hover {
+        background: var(--accent-hover);
+      }
+      section {
+        margin-top: 64px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
         margin: 0;
-        padding-left: 20px;
+        padding: 0;
+        list-style: none;
+      }
+      .cards a {
+        display: block;
+        height: 100%;
+        padding: 18px 20px;
+        background: var(--paper);
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        text-decoration: none;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .cards a:hover {
+        border-color: var(--rule-strong);
+        background: var(--lamp);
+      }
+      .cards strong {
+        display: block;
+        font-weight: 600;
+      }
+      .cards strong::after {
+        content: " →" / "";
+        color: var(--accent);
+      }
+      .cards span {
+        color: var(--graphite);
+        font-size: 0.93rem;
+      }
+      .details {
+        padding: 24px;
+        background: var(--paper);
+        border: 1px solid var(--rule);
+        border-radius: 14px;
       }
       dl {
         display: grid;
         grid-template-columns: max-content 1fr;
-        gap: 6px 20px;
+        gap: 10px 24px;
         margin: 0;
       }
       dt {
-        color: var(--muted);
+        color: var(--graphite);
       }
       dd {
         margin: 0;
       }
-      footer {
-        margin-top: 32px;
-        padding-top: 16px;
-        border-top: 1px solid var(--line);
-        color: var(--muted);
+      .people {
+        display: grid;
+        gap: 10px;
+      }
+      .people small {
+        display: block;
+        color: var(--graphite);
         font-size: 0.9rem;
       }
-      @media (max-width: 480px) {
+      footer {
+        margin-top: 48px;
+        color: var(--graphite);
+        font-size: 0.875rem;
+      }
+      @media (max-width: 640px) {
         main {
-          padding: 28px 20px;
+          padding: 40px 16px 32px;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .hero img {
+          width: 128px;
+          height: 128px;
+          border-radius: 20px;
+        }
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        section {
+          margin-top: 48px;
         }
         dl {
           grid-template-columns: 1fr;
           gap: 0;
         }
         dd {
-          margin-bottom: 10px;
+          margin-bottom: 12px;
         }
       }
     </style>
   </head>
   <body>
     <main>
-      <h1>NeatSoft PTE LTD</h1>
-      <p class="sub">Software engineering company, registered in Singapore</p>
+      <div class="hero">
+        <img
+          src="/anton.webp"
+          alt="Anton Shubin, co-founder and CEO of NeatSoft"
+          width="200"
+          height="200"
+          fetchpriority="high"
+        >
+        <div>
+          <p class="eyebrow">NeatSoft PTE LTD · Singapore</p>
+          <h1>Hi, I'm Anton Shubin</h1>
+          <p class="lead">
+            A senior full-stack engineer and tech lead, freelancing since 2013. NeatSoft PTE LTD is
+            the Singapore company I contract and invoice through.
+          </p>
+          <p class="lead">
+            I build and run SaaS products end to end, and clients own the code, the servers and the
+            keys from day one.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="https://antonshubin.com/contact-me">Book a call</a>
+            <a class="button" href="mailto:anton@neatsoft.dev">anton@neatsoft.dev</a>
+          </div>
+        </div>
+      </div>
 
-      <p>
-        NeatSoft PTE LTD is the Singapore company I contract and invoice through. I'm
-        <a href="https://antonshubin.com/">Anton Shubin</a>, a senior full-stack engineer and tech
-        lead, freelancing since 2013.
-      </p>
-      <p>
-        I build and run SaaS products end to end, and clients own the code, the servers and the
-        keys from day one.
-      </p>
+      <section aria-labelledby="more">
+        <h2 id="more">More on antonshubin.com</h2>
+        <ul class="cards">
+          <li>
+            <a href="https://antonshubin.com/how-i-work">
+              <strong>How I work</strong>
+              <span>What I promise on every project</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://antonshubin.com/catalog">
+              <strong>Services and prices</strong>
+              <span>What I offer and what it costs</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://antonshubin.com/work">
+              <strong>Past work</strong>
+              <span>Projects I built for clients</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://antonshubin.com/contact-me">
+              <strong>Contact</strong>
+              <span>Book a call, email or Telegram</span>
+            </a>
+          </li>
+        </ul>
+      </section>
 
-      <h2>Work with me</h2>
-      <p>Everything about the work lives on my personal site:</p>
-      <ul>
-        <li><a href="https://antonshubin.com/how-i-work">How I work</a></li>
-        <li><a href="https://antonshubin.com/catalog">Services and prices</a></li>
-        <li><a href="https://antonshubin.com/work">Past work</a></li>
-        <li><a href="https://antonshubin.com/contact-me">Contact and booking a call</a></li>
-      </ul>
-
-      <h2>Company details</h2>
-      <dl>
-        <dt>Legal name</dt>
-        <dd>NeatSoft PTE LTD</dd>
-        <dt>Registered in</dt>
-        <dd>Singapore</dd>
-        <dt>UEN</dt>
-        <dd>202300222R</dd>
-        <dt>Founders</dt>
-        <dd>
-          Anton Shubin, co-founder and CEO: engineering<br>
-          <a href="https://michaeldistel.com/">Michael Distel</a>, co-founder: business, legal and
-          tax
-        </dd>
-        <dt>Email</dt>
-        <dd><a href="mailto:anton@neatsoft.dev">anton@neatsoft.dev</a></dd>
-      </dl>
+      <section aria-labelledby="company">
+        <h2 id="company">Company details</h2>
+        <div class="details">
+          <dl>
+            <dt>Legal name</dt>
+            <dd>NeatSoft PTE LTD</dd>
+            <dt>Registered in</dt>
+            <dd>Singapore</dd>
+            <dt>UEN</dt>
+            <dd>202300222R</dd>
+            <dt>Founders</dt>
+            <dd class="people">
+              <span><a href="https://antonshubin.com/">Anton Shubin</a>
+                <small>Co-founder and CEO: engineering</small></span>
+              <span><a href="https://michaeldistel.com/">Michael Distel</a>
+                <small>Co-founder: business, legal and tax</small></span>
+            </dd>
+            <dt>Email</dt>
+            <dd><a href="mailto:anton@neatsoft.dev">anton@neatsoft.dev</a></dd>
+          </dl>
+        </div>
+      </section>
 
       <footer>© NeatSoft PTE LTD, Singapore</footer>
     </main>

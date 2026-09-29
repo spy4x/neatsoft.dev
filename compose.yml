@@ -1,0 +1,36 @@
+name: neatsoft
+
+networks:
+  proxy:
+    external: true
+
+services:
+  web:
+    image: nginx:1.29-alpine
+    container_name: neatsoft-web
+    restart: unless-stopped
+    # `z` relabels the files for SELinux, which is enforcing on the cloud server.
+    volumes:
+      - ./site:/usr/share/nginx/html:ro,z
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro,z
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.services.neatsoft.loadbalancer.server.port=80"
+      - "traefik.http.routers.neatsoft.rule=Host(`neatsoft.dev`) || Host(`www.neatsoft.dev`)"
+      - "traefik.http.routers.neatsoft.entrypoints=websecure"
+      - "traefik.http.routers.neatsoft.tls=true"
+      - "traefik.http.routers.neatsoft.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.neatsoft-redirect.redirectregex.regex=^https://www\\.neatsoft\\.dev/(.*)"
+      - "traefik.http.middlewares.neatsoft-redirect.redirectregex.replacement=https://neatsoft.dev/$${1}"
+      - "traefik.http.middlewares.neatsoft-redirect.redirectregex.permanent=true"
+      # Public page that should be indexed: `allow-index` overrides the default
+      # X-Robots-Tag deny (rostok stacks/traefik/dynamic/00-base.yml).
+      - "traefik.http.routers.neatsoft.middlewares=neatsoft-redirect,allow-index@file"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 32M

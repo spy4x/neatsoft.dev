@@ -13,8 +13,6 @@
     <meta name="color-scheme" content="dark">
     <meta name="theme-color" content="#15120f">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="preload" href="/fonts/literata-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="/fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NeatSoft PTE LTD">
@@ -66,7 +64,7 @@
             "@id": "https://antonshubin.com/#person",
             "name": "Anton Shubin",
             "url": "https://antonshubin.com/",
-            "image": "https://neatsoft.dev/anton.webp",
+            "image": "https://antonshubin.com/img/photo-big.webp",
             "sameAs": [
               "https://www.upwork.com/freelancers/ashubin",
               "https://github.com/spy4x",
@@ -97,6 +95,25 @@
         font-display: swap;
         src: url("/fonts/ibm-plex-sans-latin-600-normal.woff2") format("woff2");
       }
+      /* Metric-matched fallbacks keep the text from jumping when the fonts arrive. */
+      @font-face {
+        font-family: "Literata Fallback";
+        src: local("Georgia"), local("Times New Roman"), local("DejaVu Serif"),
+          local("Liberation Serif"), local("Noto Serif");
+        size-adjust: 112.16%;
+        ascent-override: 104.94%;
+        descent-override: 27.46%;
+        line-gap-override: 0%;
+      }
+      @font-face {
+        font-family: "IBM Plex Sans Fallback";
+        src: local("Arial"), local("Helvetica"), local("Liberation Sans"), local("DejaVu Sans"),
+          local("Noto Sans");
+        size-adjust: 101.17%;
+        ascent-override: 101.32%;
+        descent-override: 27.18%;
+        line-gap-override: 0%;
+      }
       :root {
         --ink: #15120f;
         --paper: #25211d;
@@ -107,7 +124,7 @@
         --graphite: #bcb7af;
         --accent: #f97316;
         --accent-hover: #fb923c;
-        --heading: "Literata", Georgia, serif;
+        --heading: "Literata", "Literata Fallback", serif;
       }
       * {
         box-sizing: border-box;
@@ -116,7 +133,7 @@
         margin: 0;
         background: var(--ink);
         color: var(--parchment);
-        font: 17px/1.65 "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font: 17px/1.65 "IBM Plex Sans", "IBM Plex Sans Fallback", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       main {
@@ -135,7 +152,6 @@
       a:focus-visible {
         outline: 2px solid var(--accent);
         outline-offset: 3px;
-        border-radius: 6px;
       }
       .eyebrow {
         margin: 0 0 12px;
@@ -235,7 +251,7 @@
         font-weight: 600;
       }
       .cards strong::after {
-        content: " →";
+        content: " →" / "";
         color: var(--accent);
       }
       .cards span {
@@ -337,7 +353,7 @@
           <li>
             <a href="https://antonshubin.com/how-i-work">
               <strong>How I work</strong>
-              <span>How an engagement runs, step by step</span>
+              <span>What I promise on every project</span>
             </a>
           </li>
           <li>
@@ -355,7 +371,7 @@
           <li>
             <a href="https://antonshubin.com/contact-me">
               <strong>Contact</strong>
-              <span>Book a call or send a short brief</span>
+              <span>Book a call, email or Telegram</span>
             </a>
           </li>
         </ul>

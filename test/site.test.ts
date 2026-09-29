@@ -46,7 +46,7 @@ Deno.test("shows Anton's photo with alt text and a fixed size", async () => {
 })
 
 Deno.test("every local file the page loads exists", async () => {
-  for (const [, path] of html.matchAll(/(?:href="|src="|url\(")\/([\w./-]+\.\w+)"/g)) {
+  for (const [, path] of html.matchAll(/(?:href=|src=|url\()["']?\/([\w./-]+\.\w+)/g)) {
     await Deno.stat(new URL(path, root))
   }
 })

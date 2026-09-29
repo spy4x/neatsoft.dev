@@ -8,7 +8,7 @@ what the company is, its registration details, and links to
 ## Layout
 
 ```
-site/          # the served files: index.html, og.png, favicon.svg, robots.txt, sitemap.xml
+site/          # the served files: index.html, anton.webp, og.png, fonts/, favicon, robots, sitemap
 test/          # checks on the page (SEO tags, JSON-LD, links, no drifting claims)
 scripts/       # deploy.ts
 compose.yml    # nginx behind the shared Traefik on the cloud server
@@ -52,8 +52,6 @@ by rostok from its generic `nginx` stack and an entry in the untracked
 4. `curl -sI https://www.neatsoft.dev/x` answers 301 to `https://neatsoft.dev/x`, and
    `curl -s https://neatsoft.dev | grep 202300222R` finds the UEN.
 
-To regenerate `site/og.png` after a wording change:
-
-```bash
-magick -size 1200x630 xc:'#121214' -fill '#ececee' -font DejaVu-Sans-Bold -pointsize 88 -annotate +96+300 'NeatSoft PTE LTD' -fill '#a3a3ab' -font DejaVu-Sans -pointsize 40 -annotate +96+380 'Software engineering company, Singapore' -annotate +96+440 'UEN 202300222R' -strip site/og.png
-```
+`site/og.png` (the link preview) was drawn with ImageMagick from `site/anton.webp` and the fonts
+in `site/fonts/`; the command is in the pull request that last changed it
+([#7](https://github.com/spy4x/neatsoft.dev/pull/7)).

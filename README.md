@@ -27,7 +27,7 @@ docker run --rm -p 8080:80 -v "$PWD/site:/usr/share/nginx/html:ro,z" -v "$PWD/ng
 
 ```bash
 deno task check    # fmt + lint + type-check + tests
-deno task deploy   # rsync to the cloud server and docker compose up (clean main only)
+deno task deploy   # rsync to the cloud server and docker compose up (clean origin/main only)
 ```
 
 ## Deploy

@@ -9,7 +9,7 @@
  */
 
 const SERVER = "cloudlab"
-const REMOTE_PATH = "~/cloudlab/apps/neatsoft.dev/"
+const REMOTE_PATH = "~/apps/neatsoft.dev/"
 const FILES = ["compose.yml", "nginx.conf", "site"]
 
 async function run(cmd: string, args: string[]): Promise<string> {

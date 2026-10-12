@@ -34,7 +34,7 @@ deno task deploy   # rsync to the cloud server and docker compose up (clean orig
 
 Merge the pull request, then run `deno task deploy` from a clean checkout of `origin/main` (the
 script refuses anything else). It copies
-`compose.yml`, `nginx.conf` and `site/` to `cloudlab:~/cloudlab/apps/neatsoft.dev/` and runs
+`compose.yml`, `nginx.conf` and `site/` to `cloudlab:~/apps/neatsoft.dev/` and runs
 `docker compose up -d` there. The container joins the external `proxy` network, and Traefik
 routes `neatsoft.dev` to it and redirects `www.neatsoft.dev` to it. There are no secrets and no
 env files.

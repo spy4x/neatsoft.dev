@@ -17,12 +17,13 @@ fi
 export CHROME_PATH
 
 SCRATCH=$(mktemp -d)
-trap 'find "$SCRATCH" -delete' EXIT INT TERM
+trap 'find "$SCRATCH" -delete' EXIT
 
 # Run from the scratch folder, outside deno.json and deno.lock: a tool for this check only, pinned
 # here, with no package younger than a day. Lighthouse runs as a Node subprocess, which needs a
 # node_modules folder: it goes in the scratch folder too.
 ROOT=$PWD
-(cd "$SCRATCH" && deno run -A --no-config --no-lock --node-modules-dir=auto --min-dep-age=1440 \
-  npm:@lhci/cli@0.15.1 autorun --config="$ROOT/scripts/lighthouse/lighthouserc.json" \
+(cd "$SCRATCH" && deno run -A --no-config --no-lock --node-modules-dir=auto \
+  --minimum-dependency-age=1440 npm:@lhci/cli@0.15.1 autorun \
+  --config="$ROOT/scripts/lighthouse/lighthouserc.json" \
   --collect.staticDistDir="$ROOT/site" --upload.outputDir="$ROOT/.lighthouseci/reports")

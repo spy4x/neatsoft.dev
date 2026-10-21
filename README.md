@@ -10,9 +10,10 @@ what the company is, its registration details, and links to
 ```
 site/          # the served files: index.html, anton.webp, og.png, fonts/, favicon, robots, sitemap
 test/          # checks on the page (SEO tags, JSON-LD, links, no drifting claims)
-scripts/       # deploy.ts
+scripts/       # deploy.ts, and lighthouse/ (the Lighthouse check)
 compose.yml    # nginx behind the shared Traefik on the cloud server
 nginx.conf     # routes and the Content-Security-Policy
+.woodpecker.yml # CI: the Lighthouse check on pull requests and pushes to main
 ```
 
 ## Run locally
@@ -26,8 +27,9 @@ docker run --rm -p 8080:80 -v "$PWD/site:/usr/share/nginx/html:ro,z" -v "$PWD/ng
 ## Tasks
 
 ```bash
-deno task check    # fmt + lint + type-check + tests
-deno task deploy   # rsync to the cloud server and docker compose up (clean origin/main only)
+deno task check       # fmt + lint + type-check + tests
+deno task lighthouse  # Lighthouse mobile budget on site/ (needs Chromium)
+deno task deploy      # rsync to the cloud server and docker compose up (clean origin/main only)
 ```
 
 ## Deploy

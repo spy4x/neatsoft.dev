@@ -1,0 +1,20 @@
+# Runs on pull requests into main and pushes to main. `branch` matches a pull request by its target
+# branch, so a commit on a pull request's branch builds once.
+when:
+  - event: [push, pull_request]
+    branch: main
+
+steps:
+  # The Lighthouse budget ("Design gate" in the global agent rules), scripts/lighthouse/run.sh. The
+  # Playwright image has Node, which Lighthouse CI starts Lighthouse with, and Chromium. Deno is
+  # downloaded with its SHA-256 checked.
+  lighthouse:
+    image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    commands:
+      - |
+          curl -fsSL -o /tmp/deno.zip https://github.com/denoland/deno/releases/download/v2.9.0/deno-x86_64-unknown-linux-gnu.zip
+          echo "96c9c73fc05ea57603bc28d8071d41e861bd40bcf2a9f849dd5969ed1a2c8498  /tmp/deno.zip" | sha256sum -c -
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends unzip
+          unzip -q -o /tmp/deno.zip -d /usr/local/bin
+          chmod +x /usr/local/bin/deno
+      - deno task lighthouse

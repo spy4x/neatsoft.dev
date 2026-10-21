@@ -3,6 +3,7 @@
     "check": "deno fmt --check && deno lint && deno check && deno task test",
     "fix": "deno fmt && deno lint --fix",
     "test": "deno test --allow-read",
+    "lighthouse": "scripts/lighthouse/run.sh",
     "deploy": "deno run --allow-run=git,rsync,ssh scripts/deploy.ts"
   },
   "imports": {

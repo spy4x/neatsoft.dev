@@ -3,3 +3,4 @@
 !.env.example
 !*.age
 .age/
+.lighthouseci/

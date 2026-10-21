@@ -33,4 +33,7 @@ skips `site/` so the HTML keeps its hand formatting.
 `deno task check` before every commit. After merge, `deno task deploy` from a clean `origin/main`,
 without asking (see README "Deploy").
 
+`deno task lighthouse` (CI step `lighthouse`) measures `site/` against the Lighthouse budget of the
+global agent rules; its settings are in `scripts/lighthouse/lighthouserc.json`.
+
 The first deploy replaces the old `neatsoft-landing` container: README "Moving off the old site".
